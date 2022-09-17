@@ -1,0 +1,2 @@
+preg_match("/[a-z]/i")
+preg_match("/[0-9]/")
