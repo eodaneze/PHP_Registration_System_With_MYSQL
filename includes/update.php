@@ -1,26 +1,34 @@
 <?php 
-  require('../includes/connection.php');
+    
+   require('./connection.php');
+   $id = $_GET['updateid'];
+    
 
-  if(isset($_POST['submit'])){
-      $name = $_POST['name'];
-      $email = $_POST['email'];
-      $mobile = $_POST['mobile'];
-      $password = $_POST['password'];
 
-      if(!empty($name) || !empty($email) || !empty($mobile) || !empty($password) || !is_numeric($name)){ 
-          $query = "insert into crud (name,email,mobile,password) values('$name','$email','$mobile','$password')";
+   $query = "select * from crud where id=$id";
+   $result = mysqli_query($con, $query);
+   $row = mysqli_fetch_assoc($result);
+   $name = $row['name'];
+   $email = $row['email'];
+   $mobile = $row['mobile'];
+   $password = $row['password'];
+   
 
-          $result = mysqli_query($con, $query);
+   if(isset($_POST['submit'])){
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $mobile = $_POST['mobile'];
+    $password = $_POST['password'];
 
-          if($result){
-               
-               header('Location: display.php?success=Data inserted successfully');
-          }else{
-              die(mysqli_error($con));
-          }
-      }
-      
-  }
+    $query = "update crud set id=$id,name='$name',email='$email',mobile='$mobile',password='$password'";
+    $result = mysqli_query($con,$query);
+
+    if($result){
+         header("Location: display.php");
+    }else{
+        die(mysqli_error($con));
+    }
+   }
 
 ?>
 
@@ -54,16 +62,17 @@
 
 
 
+
 <div class="container my-5 shadow p-4">
     <form method="post">
         <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Name</label>
-            <input type="name" class="form-control" placeholder="Enter Your Name" name="name">
+            <input type="name" class="form-control" placeholder="Enter Your Name" name="name"  value="<?= $name ?>">
         </div>
 
         <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Email</label>
-            <input type="email" class="form-control" placeholder="Enter Your Email" name="email">
+            <input type="email" class="form-control" placeholder="Enter Your Email" name="email" >
         </div>
         <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Mobile</label>
@@ -71,8 +80,8 @@
         </div>
         <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Password</label>
-            <input type="text" class="form-control" placeholder="Enter Password" name="password">
+            <input type="text" class="form-control" placeholder="Enter Password" name="password" >
         </div>
-        <button type="submit" class="btn btn-primary" name="submit">Submit</button>
+        <button type="submit" class="btn btn-primary" name="submit">Update</button>
     </form>
 </div>
